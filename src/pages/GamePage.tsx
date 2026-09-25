@@ -3,24 +3,18 @@ import {
   useParams,
 } from "react-router-dom";
 
-import GameSession from "@/components/GameSession";
+import GameSession
+  from "@/components/GameSession";
+
+import GameProvider
+  from "@/providers/GameProvider";
 
 import {
-  GAME_CONFIG,
-  isDifficultyKey,
-} from "@/data/gameConfig";
+  useGameConfig,
+} from "@/hooks/useGameConfig";
 
 
 function GamePage() {
-  /*
-    URL:
-
-    /game/easy
-
-    ise:
-
-    difficulty = "easy"
-  */
   const {
     difficulty,
   } = useParams<{
@@ -29,24 +23,16 @@ function GamePage() {
 
 
   /*
-    Difficulty parametresi yoksa
-    ana sayfaya dön.
+    Config validasyonu da
+    GameConfigContext üzerinden.
   */
-  if (!difficulty) {
-    return (
-      <Navigate
-        to="/"
-        replace
-      />
-    );
-  }
+  const {
+    isDifficultyKey,
+  } = useGameConfig();
 
 
-  /*
-    easy / medium / hard dışında
-    bir değer geldiyse ana sayfaya dön.
-  */
   if (
+    !difficulty ||
     !isDifficultyKey(
       difficulty,
     )
@@ -60,51 +46,25 @@ function GamePage() {
   }
 
 
-  /*
-    Seçilen difficulty'nin
-    config bilgisini alıyoruz.
-  */
-  const config =
-    GAME_CONFIG[
-      difficulty
-    ];
-
-
-  /*
-    ==================================================
-    GAMEPAGE ARTIK SADECE PAGE GÖREVİNDE
-    ==================================================
-
-    GamePage artık:
-
-    - kart state'i tutmuyor
-    - timer tutmuyor
-    - countdown tutmuyor
-    - eşleşme yapmıyor
-    - hamle hesaplamıyor
-
-    Sadece:
-
-    URL
-       ↓
-    difficulty
-       ↓
-    config
-       ↓
-    GameSession
-
-    akışını yönetiyor.
-  */
   return (
-    <GameSession
+    /*
+      difficulty değiştiğinde
+      yeni Provider oluşturulur.
+
+      Böylece reducer başlangıç state'i
+      yeniden hazırlanır.
+    */
+    <GameProvider
       key={
-        config.key
+        difficulty
       }
 
-      config={
-        config
+      difficulty={
+        difficulty
       }
-    />
+    >
+      <GameSession />
+    </GameProvider>
   );
 }
 

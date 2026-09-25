@@ -1,66 +1,83 @@
 import {
+  useNavigate,
+} from "react-router-dom";
+
+import Button
+  from "@/components/ui/Button";
+
+import {
+  useGame,
+} from "@/hooks/useGame";
+
+import {
   formatTime,
 } from "@/utils/gameUtils";
 
-import type {
-  GameResult,
-} from "@/types/game";
+
+function GameOverModal() {
+  const navigate =
+    useNavigate();
 
 
-interface GameOverModalProps {
-  result: GameResult;
-
-  onRestart: () => void;
-
-  onHome: () => void;
-}
+  const {
+    state,
+    resetGame,
+  } = useGame();
 
 
-function GameOverModal({
-  result,
-  onRestart,
-  onHome,
-}: GameOverModalProps) {
   return (
     <div
       className="
         fixed
         inset-0
-        z-50
+        z-[100]
+
         grid
         place-items-center
+
         bg-slate-950/65
+
         p-5
+
         backdrop-blur-md
       "
     >
+
       <section
         role="dialog"
 
         aria-modal="true"
 
-        aria-labelledby="game-over-title"
-
         className="
           w-full
           max-w-md
+
           rounded-3xl
+
           bg-white
+
           p-8
+
           text-center
+
           shadow-2xl
         "
       >
+
         <div
           className="
             mx-auto
             mb-5
+
             grid
             aspect-square
             w-16
             place-items-center
+
             rounded-2xl
+
             bg-teal-50
+
             text-3xl
           "
         >
@@ -83,8 +100,6 @@ function GameOverModal({
 
 
         <h2
-          id="game-over-title"
-
           className="
             text-3xl
             font-black
@@ -108,6 +123,7 @@ function GameOverModal({
         <div
           className="
             my-6
+
             grid
             grid-cols-2
             gap-3
@@ -139,9 +155,11 @@ function GameOverModal({
                 text-slate-800
               "
             >
-              {formatTime(
-                result.seconds,
-              )}
+              {
+                formatTime(
+                  state.seconds,
+                )
+              }
             </strong>
           </div>
 
@@ -171,7 +189,9 @@ function GameOverModal({
                 text-slate-800
               "
             >
-              {result.moves}
+              {
+                state.moves
+              }
             </strong>
           </div>
 
@@ -181,61 +201,34 @@ function GameOverModal({
         <div
           className="
             flex
-            flex-col
+            justify-center
             gap-3
-            sm:flex-row
-            sm:justify-center
           "
         >
-          <button
-            type="button"
 
+          <Button
             onClick={
-              onRestart
+              resetGame
             }
-
-            className="
-              rounded-xl
-              bg-gradient-to-r
-              from-teal-400
-              to-teal-600
-              px-5
-              py-3
-              font-bold
-              text-white
-              shadow-lg
-              shadow-teal-500/20
-              transition
-              hover:-translate-y-0.5
-            "
           >
             Yeni Oyun
-          </button>
+          </Button>
 
 
-          <button
-            type="button"
+          <Button
+            variant="secondary"
 
-            onClick={
-              onHome
+            onClick={() =>
+              navigate("/")
             }
-
-            className="
-              rounded-xl
-              bg-slate-100
-              px-5
-              py-3
-              font-bold
-              text-slate-700
-              transition
-              hover:bg-slate-200
-            "
           >
-            Ana Sayfaya Dön
-          </button>
+            Ana Sayfa
+          </Button>
+
         </div>
 
       </section>
+
     </div>
   );
 }

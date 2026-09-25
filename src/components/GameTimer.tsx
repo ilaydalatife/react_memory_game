@@ -1,50 +1,28 @@
 import {
   useEffect,
-  useState,
 } from "react";
+
+import {
+  useGame,
+} from "@/hooks/useGame";
 
 import {
   formatTime,
 } from "@/utils/gameUtils";
 
 
-interface GameTimerProps {
-  isRunning: boolean;
-
-  onTick: (
-    seconds: number,
-  ) => void;
-}
-
-
-function GameTimer({
-  isRunning,
-  onTick,
-}: GameTimerProps) {
-  /*
-    ==================================================
-    COMPONENT KENDİ STATE'İNİ YÖNETİYOR
-    ==================================================
-
-    seconds artık:
-
-    GamePage içerisinde DEĞİL.
-
-    GameTimer kendi seconds state'ini
-    kendi yönetiyor.
-  */
-  const [
-    seconds,
-    setSeconds,
-  ] = useState<number>(0);
+function GameTimer() {
+  const {
+    state,
+    dispatch,
+  } = useGame();
 
 
   useEffect(() => {
-    /*
-      Oyun başlamadıysa
-      interval oluşturmayız.
-    */
-    if (!isRunning) {
+    if (
+      state.phase !==
+      "playing"
+    ) {
       return undefined;
     }
 
@@ -52,40 +30,22 @@ function GameTimer({
     const intervalId =
       window.setInterval(
         () => {
-          setSeconds(
-            (
-              currentSeconds,
-            ) => {
-              const nextSeconds =
-                currentSeconds + 1;
-
-
-              /*
-                Parent sadece son saniye değerini öğreniyor.
-
-                Timer state'inin sahibi yine GameTimer.
-              */
-              onTick(
-                nextSeconds,
-              );
-
-
-              return nextSeconds;
-            },
-          );
+          dispatch({
+            type:
+              "TIMER_TICK",
+          });
         },
         1000,
       );
 
 
-    return () => {
+    return () =>
       window.clearInterval(
         intervalId,
       );
-    };
   }, [
-    isRunning,
-    onTick,
+    state.phase,
+    dispatch,
   ]);
 
 
@@ -100,6 +60,7 @@ function GameTimer({
         text-center
       "
     >
+
       <span
         className="
           block
@@ -113,6 +74,7 @@ function GameTimer({
         Süre
       </span>
 
+
       <strong
         className="
           mt-1
@@ -121,8 +83,13 @@ function GameTimer({
           text-slate-800
         "
       >
-        {formatTime(seconds)}
+        {
+          formatTime(
+            state.seconds,
+          )
+        }
       </strong>
+
     </div>
   );
 }

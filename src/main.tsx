@@ -1,12 +1,29 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
+import {
+  StrictMode,
+} from "react";
 
-import App from "@/App";
+import {
+  createRoot,
+} from "react-dom/client";
+
+import {
+  BrowserRouter,
+} from "react-router-dom";
+
+import App
+  from "@/App";
+
+import GameConfigProvider
+  from "@/providers/GameConfigProvider";
+
 import "@/index.css";
 
+
 const rootElement =
-  document.getElementById("root");
+  document.getElementById(
+    "root",
+  );
+
 
 if (!rootElement) {
   throw new Error(
@@ -14,10 +31,21 @@ if (!rootElement) {
   );
 }
 
-createRoot(rootElement).render(
+
+createRoot(
+  rootElement,
+).render(
   <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+
+    <GameConfigProvider>
+
+      <BrowserRouter>
+
+        <App />
+
+      </BrowserRouter>
+
+    </GameConfigProvider>
+
   </StrictMode>,
 );

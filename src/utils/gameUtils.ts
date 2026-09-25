@@ -7,16 +7,10 @@ import type {
 } from "@/types/game";
 
 
-/*
-  Generic array karıştırma fonksiyonu.
-*/
 export function shuffleArray<T>(
   items: T[],
 ): T[] {
-  /*
-    kopyasını oluştur.
-  */
-  const shuffled: T[] = [
+  const shuffled = [
     ...items,
   ];
 
@@ -49,27 +43,18 @@ export function shuffleArray<T>(
 }
 
 
-/*
-  pairCount kadar çift kart üretir.
-*/
 export function createDeck(
   pairCount: number,
 ): MemoryCard[] {
-  /*
-    Gerekli sembolleri seçiyoruz.
-  */
-  const selectedSymbols =
+  const symbols =
     CARD_SYMBOLS.slice(
       0,
       pairCount,
     );
 
 
-  /*
-    Her sembolden iki adet kart oluşturuyoruz.
-  */
   const cards: MemoryCard[] =
-    selectedSymbols.flatMap(
+    symbols.flatMap(
       (
         symbol,
         index,
@@ -93,24 +78,10 @@ export function createDeck(
     );
 
 
-  /*
-    Kartları karıştırıp döndürüyoruz.
-  */
   return shuffleArray(cards);
 }
 
 
-/*
-  Saniyeyi:
-
-  75
-
-  →
-
-  01:15
-
-  formatına dönüştürür.
-*/
 export function formatTime(
   totalSeconds: number,
 ): string {

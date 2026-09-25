@@ -49,6 +49,12 @@ export const GAME_CONFIG: Record<
     pairCount: 8,
 
     hasBlockedCell: false,
+
+    icon: "🌱",
+
+    badge: "Başlangıç",
+
+    description: "Hızlı bir başlangıç için ideal",
   },
 
   medium: {
@@ -68,6 +74,12 @@ export const GAME_CONFIG: Record<
     pairCount: 12,
 
     hasBlockedCell: true,
+
+    icon: "⚡",
+
+    badge: "Orta",
+
+    description: "Hafızanı biraz daha zorla",
   },
 
   hard: {
@@ -83,6 +95,12 @@ export const GAME_CONFIG: Record<
     pairCount: 18,
 
     hasBlockedCell: false,
+
+    icon: "🔥",
+
+    badge: "Zorlu",
+
+    description: "En büyük grid ile meydan oku",
   },
 };
 

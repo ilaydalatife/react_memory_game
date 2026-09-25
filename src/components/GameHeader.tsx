@@ -1,54 +1,43 @@
-import GameTimer from "@/components/GameTimer";
+import {
+  useNavigate,
+} from "react-router-dom";
+
+import Button
+  from "@/components/ui/Button";
+
+import GameTimer
+  from "@/components/GameTimer";
+
+import {
+  useGame,
+} from "@/hooks/useGame";
 
 
-interface GameHeaderProps {
-  difficultyLabel: string;
-
-  isTimerRunning: boolean;
-
-  timerKey: number;
-
-  onTimeChange: (
-    seconds: number,
-  ) => void;
-
-  onRestart: () => void;
-
-  onHome: () => void;
-}
+function GameHeader() {
+  const navigate =
+    useNavigate();
 
 
-function GameHeader({
-  difficultyLabel,
-  isTimerRunning,
-  timerKey,
-  onTimeChange,
-  onRestart,
-  onHome,
-}: GameHeaderProps) {
+  const {
+    config,
+    resetGame,
+  } = useGame();
+
+
   return (
     <header
-      /*
-        sticky:
-        Sayfa scroll edildiğinde header ekranın
-        üst kısmında kalır.
-
-        top-4:
-        Ekranın üstünden 16px boşluk bırakır.
-
-        z-50:
-        Kartların header'ın üzerine çıkmasını engeller.
-      */
       className="
         sticky
-        top-4
+        top-3
         z-50
 
-        mb-6
+        mb-3
+        shrink-0
+
         grid
         grid-cols-1
         items-center
-        gap-5
+        gap-3
 
         rounded-[1.75rem]
 
@@ -58,7 +47,7 @@ function GameHeader({
         bg-white/95
 
         px-5
-        py-4
+        py-3
 
         shadow-lg
         shadow-slate-200/50
@@ -70,13 +59,13 @@ function GameHeader({
       "
     >
 
-      {/* SOL TARAF: LEVEL + BAŞLIK */}
       <div
         className="
           text-center
           md:text-left
         "
       >
+
         <p
           className="
             mb-1
@@ -87,7 +76,9 @@ function GameHeader({
             text-teal-600
           "
         >
-          {difficultyLabel} seviye
+          {
+            config.label
+          } seviye
         </p>
 
 
@@ -101,108 +92,40 @@ function GameHeader({
         >
           Matching Game
         </h1>
+
       </div>
 
 
-      {/* ORTA: TIMER */}
+      <GameTimer />
+
+
       <div
         className="
           flex
-          justify-center
-        "
-      >
-        <GameTimer
-          /*
-            Yeni oyun başladığında key değişir.
-
-            Böylece GameTimer yeniden oluşturulur
-            ve kendi seconds state'i sıfırlanır.
-          */
-          key={timerKey}
-
-          isRunning={
-            isTimerRunning
-          }
-
-          onTick={
-            onTimeChange
-          }
-        />
-      </div>
-
-
-      {/* SAĞ: BUTONLAR */}
-      <div
-        className="
-          flex
-          flex-col
           justify-center
           gap-2
-
-          sm:flex-row
         "
       >
-        <button
-          type="button"
 
-          onClick={
-            onHome
+        <Button
+          variant="secondary"
+
+          onClick={() =>
+            navigate("/")
           }
-
-          className="
-            rounded-xl
-
-            bg-slate-100
-
-            px-4
-            py-3
-
-            font-bold
-            text-slate-700
-
-            transition-all
-            duration-200
-
-            hover:-translate-y-0.5
-            hover:bg-slate-200
-          "
         >
           Ana Sayfa
-        </button>
+        </Button>
 
 
-        <button
-          type="button"
-
+        <Button
           onClick={
-            onRestart
+            resetGame
           }
-
-          className="
-            rounded-xl
-
-            bg-gradient-to-r
-            from-teal-400
-            to-teal-600
-
-            px-4
-            py-3
-
-            font-bold
-            text-white
-
-            shadow-lg
-            shadow-teal-500/20
-
-            transition-all
-            duration-200
-
-            hover:-translate-y-0.5
-            hover:shadow-xl
-          "
         >
           Yeni Oyun
-        </button>
+        </Button>
+
       </div>
 
     </header>

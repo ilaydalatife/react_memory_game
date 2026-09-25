@@ -36,30 +36,10 @@
 
     "jsx": "react-jsx",
 
-    /*
-      VITE TYPE DESTEĞİ:
-
-      TypeScript'in:
-
-      import "@/index.css";
-
-      gibi CSS importlarını tanımasını sağlar.
-    */
     "types": [
       "vite/client"
     ],
 
-    /*
-      ABSOLUTE PATH:
-
-      @ işareti src klasörünü temsil eder.
-
-      DİKKAT:
-      Artık baseUrl kullanmıyoruz.
-
-      Yeni TypeScript sürümlerinde baseUrl deprecated.
-      paths doğrudan tsconfig dosyasına göre çözümlenebilir.
-    */
     "paths": {
       "@/*": [
         "./src/*"

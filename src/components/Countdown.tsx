@@ -1,140 +1,137 @@
 import {
   useEffect,
-  useState,
 } from "react";
 
+import {
+  useGame,
+} from "@/hooks/useGame";
 
-interface CountdownProps {
-  onComplete: () => void;
-}
+
+function Countdown() {
+  const {
+    state,
+    dispatch,
+  } = useGame();
 
 
-function Countdown({
-  onComplete,
-}: CountdownProps) {
-  /*
-    ==================================================
-    COMPONENT KENDİ STATE'İNİ YÖNETİYOR
-    ==================================================
-
-    Önce:
-
-    countdown state'i GamePage içindeydi.
-
-    Şimdi:
-
-    Countdown componenti kendi count state'inin sahibi.
-  */
-  const [
-    count,
-    setCount,
-  ] = useState<number>(3);
+  const {
+    countdown,
+    phase,
+  } = state;
 
 
   useEffect(() => {
-    /*
-      3
-      2
-      1
+    if (
+      phase !==
+      "countdown"
+    ) {
+      return undefined;
+    }
 
-      şeklinde ilerliyoruz.
+
+    /*
+      3 → 2 → 1 → 0
     */
-    if (count > 0) {
-      const timerId =
+    if (
+      countdown > 0
+    ) {
+      const timeoutId =
         window.setTimeout(
           () => {
-            setCount(
-              (
-                currentCount,
-              ) =>
-                currentCount - 1,
-            );
+            dispatch({
+              type:
+                "COUNTDOWN_TICK",
+            });
           },
           1000,
         );
 
 
-      return () => {
+      return () =>
         window.clearTimeout(
-          timerId,
+          timeoutId,
         );
-      };
     }
 
 
     /*
-      Sayaç 0 olduğunda:
-
-      BAŞLA!
-
-      kısa süre gösterilir.
+      0 olduğunda kısa süre
+      BAŞLA! göster.
     */
-    const startTimerId =
+    const startTimeout =
       window.setTimeout(
         () => {
-          onComplete();
+          dispatch({
+            type:
+              "COUNTDOWN_COMPLETE",
+          });
         },
         650,
       );
 
 
-    return () => {
+    return () =>
       window.clearTimeout(
-        startTimerId,
+        startTimeout,
       );
-    };
   }, [
-    count,
-    onComplete,
+    countdown,
+    phase,
+    dispatch,
   ]);
 
 
   return (
     <div
-      role="status"
-
-      aria-live="polite"
-
       className="
         absolute
         inset-0
-        z-30
+        z-40
+
         grid
         place-items-center
+
         rounded-3xl
-        bg-slate-900/50
+
+        bg-slate-950/45
+
         backdrop-blur-sm
       "
     >
-      <div
-        /*
-          Tailwind animate-pulse kullanıyoruz.
 
-          Ek CSS animation yazmamıza gerek yok.
-        */
+      <div
         className="
           grid
           aspect-square
-          w-36
+          w-32
           place-items-center
+
           rounded-full
+
           border-4
           border-white/80
+
           bg-teal-500/90
-          text-5xl
+
+          text-4xl
           font-black
           text-white
+
           shadow-2xl
+
           animate-pulse
-          sm:w-44
+
+          sm:w-40
+          sm:text-5xl
         "
       >
         {
-          count > 0
-            ? count
+          countdown > 0
+            ? countdown
             : "BAŞLA!"
         }
       </div>
+
     </div>
   );
 }
